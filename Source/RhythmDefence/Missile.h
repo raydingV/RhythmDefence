@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Missile.generated.h"
 
@@ -16,20 +17,46 @@ public:
 	AMissile();
 
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* MeshComponent;
+		UStaticMeshComponent* MeshComponent;
+
+	UPROPERTY(EditAnywhere)
+	TArray<UStaticMesh*> MeshArray;
+
+	UPROPERTY(EditAnywhere)
+		UBoxComponent* BoxCollision;
 	
+	UFUNCTION()
+		void ActArrow(float DeltaTime, float Speed);
+	
+	UFUNCTION()
+		void ActFire(float DeltaTime);
+
+	UFUNCTION()
+		void ActLog(float _DeltaTime);
+
+	FVector TargetLocation;
+	FVector CurrentLocation;
 	FVector StartLocation;
 	FVector InitialVelocity;
 	FVector Acceleration;
 	FVector Velocity;
+	
 	FRotator TargetRotation;
 	
 	float ElapsedTime;
 	float Gravity;
+	float Speed;
+	
 	FVector NewLocation;
 
 	FVector Direction;
 	float maxPitch;
+
+	bool Arrow;
+	bool Fire;
+	bool Log;
+	bool SetRotation;
+	bool Crate;
 	
 protected:
 	// Called when the game starts or when spawned

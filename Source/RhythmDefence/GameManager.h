@@ -30,9 +30,18 @@ public:
 	UFUNCTION()
 		void ButtonY();
 
+	UFUNCTION()
+		void ResetAll();
+
 	bool ChargeSoldier;
+	bool CanMakeCombo;
 
 	int ChargeSoldierTag;
+
+	int ButtonXInput;
+	int ButtonAInput;
+	int ButtonBInput;
+	int ButtonYInput;
 	
 protected:
 	// Called when the game starts or when spawned

@@ -4,45 +4,47 @@
 
 #include "CoreMinimal.h"
 #include "GameManager.h"
-#include "Missile.h"
-#include "NpcSoldierParent.h"
 #include "GameFramework/Actor.h"
-#include "SoldierNpc.generated.h"
+#include "NpcSoldierParent.generated.h"
 
 UCLASS()
-class RHYTHMDEFENCE_API ASoldierNpc : public AActor
+class RHYTHMDEFENCE_API ANpcSoldierParent : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ASoldierNpc();
+	ANpcSoldierParent();
 
 	AActor* GameManager;
 	AGameManager* GameManagerClass;
-
-	UPROPERTY(EditAnywhere)
-	AActor* Parent;
-	ANpcSoldierParent* ParentClass;
-
-	AActor* Arrow;
-	AMissile* ArrowClass;
 	
-	FActorSpawnParameters SpawnParameters;
+	UFUNCTION()
+		void TransformToObject(float DeltaTime, bool GetFirstLocation);
+
+	UFUNCTION()
+		void ResetSoldiers();
 
 	UPROPERTY(EditAnywhere)
-	UClass* MissileSpawn;
+	int TagOfSoldier;
 
-	bool SingleFire;
+	UPROPERTY(EditAnywhere)
+	FVector3d TargetLocation;
 
-	UFUNCTION()
-		void SoldierArrow();
+	FVector3d CurrentLocation;
 
-	UFUNCTION()
-		void SoldierFire();
+	FVector3d FirstLocation;
 
-	UFUNCTION()
-		void SoldierLog();
+	FVector Direction;
+
+	FVector NewLocation;
+
+	FRotator TargetRotation;
+
+	TArray<AActor*>SoldierFireArray;
+	TArray<AActor*>SoldierArray;
+
+	bool SoldierCanFire;
 
 protected:
 	// Called when the game starts or when spawned

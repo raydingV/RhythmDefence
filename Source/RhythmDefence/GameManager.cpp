@@ -25,19 +25,29 @@ void AGameManager::BeginPlay()
 void AGameManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
 }
 
 void AGameManager::ChargeSoldiers()
 {
 	ChargeSoldier = true;
+	CanMakeCombo = true;
 }
 
 void AGameManager::ButtonX()
 {
-	if(ChargeSoldier != true)
+	if(ChargeSoldier != true && (ButtonAInput == 0 && ButtonBInput == 0))
 	{
 		ChargeSoldierTag = 0;
 		ChargeSoldiers();
+	}
+	else if(ButtonAInput == 2 || ButtonBInput == 2)
+	{
+		ButtonXInput++;
+	}
+	else
+	{
+		ResetAll();
 	}
 }
 
@@ -48,6 +58,14 @@ void AGameManager::ButtonA()
 		ChargeSoldierTag = 1;
 		ChargeSoldier = false;
 	}
+	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonBInput == 0)
+	{
+		ButtonAInput++;
+	}
+	else
+	{
+		ResetAll();
+	}
 }
 
 void AGameManager::ButtonB()
@@ -56,6 +74,14 @@ void AGameManager::ButtonB()
 	{
 		ChargeSoldierTag = 2;
 		ChargeSoldier = false;
+	}
+	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonAInput == 0)
+	{
+		ButtonBInput++;
+	}
+	else
+	{
+		ResetAll();
 	}
 }
 
@@ -66,6 +92,22 @@ void AGameManager::ButtonY()
 		ChargeSoldierTag = 3;
 		ChargeSoldier = false;
 	}
+	else
+	{
+		ResetAll();
+	}
 }
+
+void AGameManager::ResetAll()
+{
+	ChargeSoldierTag = 0;
+	ButtonXInput = 0;
+	ButtonAInput = 0;
+	ButtonBInput = 0;
+	ButtonYInput = 0;
+	ChargeSoldier = false;
+	CanMakeCombo = false;
+}
+
 
 

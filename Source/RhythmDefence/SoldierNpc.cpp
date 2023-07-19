@@ -3,6 +3,7 @@
 
 #include "SoldierNpc.h"
 
+#include "ComponentUtils.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -10,8 +11,7 @@ ASoldierNpc::ASoldierNpc()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	TagOfSoldier = 0;
+	SingleFire = true;
 }
 
 // Called when the game starts or when spawned
@@ -21,8 +21,11 @@ void ASoldierNpc::BeginPlay()
 	
 	GameManager = Cast<AGameManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass()));
 	GameManagerClass = Cast<AGameManager>(GameManager);
-
-	FirstLocation = GetActorLocation();
+	
+	Parent = GetAttachParentActor();
+	ParentClass = Cast<ANpcSoldierParent>(Parent);
+	
+	ParentClass->SoldierArray.Push(this);
 }
 
 // Called every frame
@@ -30,40 +33,127 @@ void ASoldierNpc::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (GameManagerClass != nullptr)
-	{
-		if(TagOfSoldier == GameManagerClass->ChargeSoldierTag)
-		{
-			ChargeThisSoldier(DeltaTime, false);
-		}
-		else
-		{
-			ChargeThisSoldier(DeltaTime, true);
-		}
-	}
+	SoldierArrow();
+	SoldierFire();
+	SoldierLog();
 }
 
-void ASoldierNpc::ChargeThisSoldier(float DeltaTime, bool GetFirstLocation)
+void ASoldierNpc::SoldierArrow()
 {
-	CurrentLocation = GetActorLocation();
-	
-	if(TargetLocation.Y <= CurrentLocation.Y && GetFirstLocation == false)
+	if(ParentClass != nullptr && GameManagerClass->ChargeSoldierTag == 2)
 	{
-		Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
-		NewLocation = CurrentLocation + (Direction * 300 * DeltaTime);
-		SetActorLocation(NewLocation);
-	}
-	if(TargetLocation.Y >= CurrentLocation.Y)
-	{
-		GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
-	}
+		if(GameManagerClass->ChargeSoldierTag == ParentClass->TagOfSoldier)
+		{
+			if(GameManagerClass->ButtonBInput == 2 && GameManagerClass->ButtonXInput == 1)
+			{
+				SingleFire = ParentClass->SoldierCanFire;
+				if(MissileSpawn != nullptr && SingleFire == true)
+				{
+					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
+					ArrowClass = Cast<AMissile>(Arrow);
+					ArrowClass->Arrow = true;
+					ArrowClass->Speed = 1000;
+					ParentClass->SoldierFireArray.Push(Arrow);
+				}
+			}
 
-	if(GetFirstLocation == true && FirstLocation.Y >= CurrentLocation.Y)
-	{
-		Direction = (FirstLocation - CurrentLocation).GetSafeNormal();
-		NewLocation = CurrentLocation + (Direction * 300 * DeltaTime);
-		SetActorLocation(NewLocation);
+			if(GameManagerClass->ButtonAInput == 2 && GameManagerClass->ButtonXInput == 1)
+			{
+				SingleFire = ParentClass->SoldierCanFire;
+				if(MissileSpawn != nullptr && SingleFire == true)
+				{
+					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
+					ArrowClass = Cast<AMissile>(Arrow);
+					ArrowClass->Arrow = true;
+					ArrowClass->Speed = 300;
+					ParentClass->SoldierFireArray.Push(Arrow);
+				}
+			}
+		}
 	}
 }
+
+void ASoldierNpc::SoldierFire()
+{
+	if(ParentClass != nullptr && GameManagerClass->ChargeSoldierTag == 1)
+	{
+		if(GameManagerClass->ChargeSoldierTag == ParentClass->TagOfSoldier)
+		{
+			if(GameManagerClass->ButtonAInput == 2 && GameManagerClass->ButtonXInput == 1)
+			{
+				SingleFire = ParentClass->SoldierCanFire;
+				if(MissileSpawn != nullptr && SingleFire == true)
+				{
+					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(GetActorLocation().X,GetActorLocation().Y - 1120,960), FRotator3d(0,180,180), SpawnParameters);
+					ArrowClass = Cast<AMissile>(Arrow);
+					ArrowClass->TargetLocation = FVector3d(GetActorLocation().X,Arrow->GetActorLocation().Y,170);
+					ArrowClass->SetRotation = false;
+					ArrowClass->Fire = true;
+					ArrowClass->Speed = 1000;
+					ParentClass->SoldierFireArray.Push(Arrow);
+				}
+			}
+
+			if(GameManagerClass->ButtonBInput == 2 && GameManagerClass->ButtonXInput == 1)
+			{
+				SingleFire = ParentClass->SoldierCanFire;
+				if(MissileSpawn != nullptr && SingleFire == true)
+				{
+					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
+					ArrowClass = Cast<AMissile>(Arrow);
+					ArrowClass->TargetLocation = FVector3d(GetActorLocation().X,-2100,170);
+					ArrowClass->Fire = true;
+					ArrowClass->Speed = 2000;
+					ParentClass->SoldierFireArray.Push(Arrow);
+				}
+			}
+		}
+	}
+}
+
+void ASoldierNpc::SoldierLog()
+{
+	if(ParentClass != nullptr && GameManagerClass->ChargeSoldierTag == 3)
+	{
+		if(GameManagerClass->ChargeSoldierTag == ParentClass->TagOfSoldier)
+		{
+			if(GameManagerClass->ButtonAInput == 2 && GameManagerClass->ButtonXInput == 1)
+			{
+				SingleFire = ParentClass->SoldierCanFire;
+				if(MissileSpawn != nullptr && SingleFire == true)
+				{
+					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
+					ArrowClass = Cast<AMissile>(Arrow);
+					ArrowClass->TargetLocation = FVector3d(-290,50,820);
+					ArrowClass->Log = true;
+					ArrowClass->Speed = 1000;
+					ArrowClass->MeshComponent->SetStaticMesh(ArrowClass->MeshArray[0]);
+					ParentClass->SoldierFireArray.Push(Arrow);
+				}
+			}
+
+			if(GameManagerClass->ButtonBInput == 2 && GameManagerClass->ButtonXInput == 1)
+			{
+				SingleFire = ParentClass->SoldierCanFire;
+				if(MissileSpawn != nullptr && SingleFire == true)
+				{
+					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
+					ArrowClass = Cast<AMissile>(Arrow);
+					ArrowClass->TargetLocation = FVector3d(GetActorLocation().X,-1590,170);
+					ArrowClass->Log = true;
+					ArrowClass->Crate = true;
+					ArrowClass->Speed = 1500;
+					ArrowClass->MeshComponent->SetStaticMesh(ArrowClass->MeshArray[1]);
+					ParentClass->SoldierFireArray.Push(Arrow);
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
 
 
