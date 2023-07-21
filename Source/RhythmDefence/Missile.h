@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Missile.generated.h"
 
@@ -21,9 +20,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<UStaticMesh*> MeshArray;
-
-	UPROPERTY(EditAnywhere)
-		UBoxComponent* BoxCollision;
 	
 	UFUNCTION()
 		void ActArrow(float DeltaTime, float Speed);
@@ -52,9 +48,13 @@ public:
 	FVector Direction;
 	float maxPitch;
 
-	bool Arrow;
-	bool Fire;
-	bool Log;
+	UPROPERTY(BlueprintReadOnly)
+		bool Arrow;
+	UPROPERTY(BlueprintReadOnly)
+		bool Fire;
+	UPROPERTY(BlueprintReadOnly)
+		bool Log;
+	
 	bool SetRotation;
 	bool Crate;
 	

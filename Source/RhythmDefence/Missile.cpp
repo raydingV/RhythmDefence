@@ -12,8 +12,6 @@ AMissile::AMissile()
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = MeshComponent;
 
-	// BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision"));
-
 	Speed = 0;
 	TargetLocation = FVector3d(0,0,0);
 
@@ -86,6 +84,14 @@ void AMissile::ActArrow(float DeltaTime, float speed)
 	
 	TargetRotation = FRotationMatrix::MakeFromX(NewLocation).Rotator();
 	TargetRotation.Pitch -= 150;
+
+	if(GetActorLocation().Z <= 170)
+	{
+		MeshComponent->SetSimulatePhysics(false);
+		MeshComponent->WakeRigidBody();
+		Arrow = false;
+		TargetRotation = FRotator3d(GetActorRotation().Pitch, 0, 130);
+	}
 }
 
 void AMissile::ActFire(float DeltaTime)
@@ -95,7 +101,7 @@ void AMissile::ActFire(float DeltaTime)
 	Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
 	NewLocation = CurrentLocation + (Direction * Speed * DeltaTime);
 	
-	TargetRotation = FMath::Lerp(GetActorRotation(), Direction.Rotation(), DeltaTime * 2);
+	TargetRotation = FMath::Lerp(GetActorRotation(), NewLocation.Rotation(), DeltaTime * 2);
 }
 
 void AMissile::ActLog(float _DeltaTime)

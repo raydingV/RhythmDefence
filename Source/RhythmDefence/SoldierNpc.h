@@ -27,6 +27,9 @@ public:
 
 	AActor* Arrow;
 	AMissile* ArrowClass;
+
+	UPROPERTY(EditAnywhere)
+		USkeletalMeshComponent* Mesh;
 	
 	FActorSpawnParameters SpawnParameters;
 
