@@ -12,6 +12,7 @@ AGameManager::AGameManager()
 	ChargeSoldier = false;
 
 	ChargeSoldierTag = 0;
+	HealthOfCastle = 100;
 }
 
 // Called when the game starts or when spawned
@@ -119,7 +120,8 @@ void AGameManager::SpawnEnemys(float _deltaTime)
 		
 		EnemyActor = GetWorld()->SpawnActor<AActor>(SpawnEnemy, GetActorLocation(), GetActorRotation());
 		EnemyClass = Cast<AEnemy>(EnemyActor);
-		EnemyClass->TagOfEnemey = RandomEnemy;
+		EnemyClass->TagOfEnemy = RandomEnemy;
+		EnemyClass->SetTimeAttack();
 		EnemyClass->Mesh->SetSkeletalMesh(EnemyClass->MeshArray[RandomEnemy]);
 		
 		SpawnTime = FMath::RandRange(180,360);

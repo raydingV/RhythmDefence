@@ -26,8 +26,11 @@ void ASoldierNpc::BeginPlay()
 	
 	Parent = GetAttachParentActor();
 	ParentClass = Cast<ANpcSoldierParent>(Parent);
-	
-	ParentClass->SoldierArray.Push(this);
+
+	if(ParentClass != nullptr)
+	{
+		ParentClass->SoldierArray.Push(this);
+	}
 }
 
 // Called every frame
@@ -54,7 +57,7 @@ void ASoldierNpc::SoldierArrow()
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
 					ArrowClass = Cast<AMissile>(Arrow);
 					ArrowClass->Arrow = true;
-					ArrowClass->Speed = 800;
+					ArrowClass->Speed = 1500;
 					ParentClass->SoldierFireArray.Push(Arrow);
 				}
 			}
