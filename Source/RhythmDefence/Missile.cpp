@@ -20,6 +20,7 @@ AMissile::AMissile()
 	Log = false;
 	SetRotation = true;
 	Crate = false;
+	CanTrigger = true;
 }
 
 // Called when the game starts or when spawned
@@ -35,7 +36,7 @@ void AMissile::BeginPlay()
 	Gravity = 980.f;
 	
 	NewLocation = GetActorLocation();
-	TargetRotation = FRotator3d(-50.000000,270.000000,-359.999999);
+	TargetRotation = FRotator3d(0,-180,-70);
 }
 
 // Called every frame
@@ -81,15 +82,18 @@ void AMissile::ActArrow(float DeltaTime, float speed)
 	NewLocation.Z = Height;
 
 	NewLocation.Y -= speed * DeltaTime;
-	
-	TargetRotation = FRotationMatrix::MakeFromX(NewLocation).Rotator();
-	TargetRotation.Pitch -= 150;
 
+	if(TargetRotation.Roll <= 40)
+	{
+		TargetRotation.Roll += 50 * DeltaTime;
+	}
+	
 	if(GetActorLocation().Z <= 170)
 	{
 		MeshComponent->SetSimulatePhysics(false);
 		MeshComponent->WakeRigidBody();
 		Arrow = false;
+		CanTrigger = false;
 		TargetRotation = FRotator3d(GetActorRotation().Pitch, 0, 130);
 	}
 }
@@ -102,6 +106,11 @@ void AMissile::ActFire(float DeltaTime)
 	NewLocation = CurrentLocation + (Direction * Speed * DeltaTime);
 	
 	TargetRotation = FMath::Lerp(GetActorRotation(), NewLocation.Rotation(), DeltaTime * 2);
+
+	if(GetActorLocation().Z <= 170)
+	{
+		this->Destroy();
+	}
 }
 
 void AMissile::ActLog(float _DeltaTime)
@@ -110,10 +119,18 @@ void AMissile::ActLog(float _DeltaTime)
 	{
 		if(GetActorLocation().Y <= 120)
 		{
+			CanTrigger = true;
 			TargetLocation.Z = 170;
 			if(GetActorLocation().Z <= 170)
 			{
-				TargetLocation = FVector3d(GetActorLocation().X, -2200, GetActorLocation().Z);
+				if(GetActorLocation().Y >= -2200)
+				{
+					TargetLocation = FVector3d(GetActorLocation().X, -2200, GetActorLocation().Z);
+				}
+				else
+				{
+					this->Destroy();
+				}
 			}
 		}
 		else
@@ -123,6 +140,7 @@ void AMissile::ActLog(float _DeltaTime)
 	}
 	else
 	{
+		CanTrigger = false;
 		if(GetActorLocation().Z <= 170)
 		{
 			this->Destroy();

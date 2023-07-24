@@ -11,14 +11,22 @@ UCLASS()
 class RHYTHMDEFENCE_API AEnemy : public AActor
 {
 	GENERATED_BODY()
+	
+public:	
+	// Sets default values for this actor's properties
+	AEnemy();
 
-	AMissile* MissileClass;
+	UPROPERTY(BlueprintReadWrite)
+		AMissile* MissileClass;
 
 	UFUNCTION(BlueprintCallable)
-		void HitByMissile(AActor* _MissileClass);
+	void HitByMissile(AActor* _MissileClass);
 
 	UPROPERTY(EditAnywhere)
-		USkeletalMeshComponent* Mesh;
+	USkeletalMeshComponent* Mesh;
+
+	UPROPERTY(EditAnywhere)
+	TArray<USkeletalMesh*> MeshArray;
 
 	int Health;
 
@@ -34,10 +42,14 @@ class RHYTHMDEFENCE_API AEnemy : public AActor
 	FVector NewLocation;
 
 	FRotator TargetRotation;
-	
-public:	
-	// Sets default values for this actor's properties
-	AEnemy();
+
+	int TagOfEnemey;
+
+	UFUNCTION()
+		void TransformActor();
+
+	bool SetTransform;
+	bool hitByLog;
 
 protected:
 	// Called when the game starts or when spawned

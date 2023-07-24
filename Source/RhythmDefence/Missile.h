@@ -54,6 +54,8 @@ public:
 		bool Fire;
 	UPROPERTY(BlueprintReadOnly)
 		bool Log;
+	UPROPERTY(BlueprintReadOnly)
+		bool CanTrigger;
 	
 	bool SetRotation;
 	bool Crate;

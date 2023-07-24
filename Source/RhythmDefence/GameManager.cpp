@@ -18,14 +18,14 @@ AGameManager::AGameManager()
 void AGameManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	SpawnTime = FMath::RandRange(180,360);
 }
 
 // Called every frame
 void AGameManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+	SpawnEnemys(DeltaTime);
 }
 
 void AGameManager::ChargeSoldiers()
@@ -58,7 +58,7 @@ void AGameManager::ButtonA()
 		ChargeSoldierTag = 1;
 		ChargeSoldier = false;
 	}
-	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonBInput == 0)
+	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonBInput == 0 && ButtonAInput < 2)
 	{
 		ButtonAInput++;
 	}
@@ -75,7 +75,7 @@ void AGameManager::ButtonB()
 		ChargeSoldierTag = 2;
 		ChargeSoldier = false;
 	}
-	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonAInput == 0)
+	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonAInput == 0 && ButtonBInput < 2)
 	{
 		ButtonBInput++;
 	}
@@ -108,6 +108,24 @@ void AGameManager::ResetAll()
 	ChargeSoldier = false;
 	CanMakeCombo = false;
 }
+
+void AGameManager::SpawnEnemys(float _deltaTime)
+{
+	SpawnTime -= 1;
+
+	if(SpawnTime <= 0)
+	{
+		RandomEnemy = FMath::RandRange(0,2);
+		
+		EnemyActor = GetWorld()->SpawnActor<AActor>(SpawnEnemy, GetActorLocation(), GetActorRotation());
+		EnemyClass = Cast<AEnemy>(EnemyActor);
+		EnemyClass->TagOfEnemey = RandomEnemy;
+		EnemyClass->Mesh->SetSkeletalMesh(EnemyClass->MeshArray[RandomEnemy]);
+		
+		SpawnTime = FMath::RandRange(180,360);
+	}
+}
+
 
 
 

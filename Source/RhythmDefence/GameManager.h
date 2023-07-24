@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Enemy.h"
 #include "GameFramework/Actor.h"
 #include "GameManager.generated.h"
 
@@ -33,6 +34,9 @@ public:
 	UFUNCTION()
 		void ResetAll();
 
+	UFUNCTION()
+		void SpawnEnemys(float _deltaTime);
+
 	bool ChargeSoldier;
 	bool CanMakeCombo;
 
@@ -42,6 +46,21 @@ public:
 	int ButtonAInput;
 	int ButtonBInput;
 	int ButtonYInput;
+
+	int RandomEnemy;
+
+	float SpawnTime;
+
+	UPROPERTY(EditAnywhere)
+		FVector EnemySpawnLocation;
+	UPROPERTY(EditAnywhere)
+		FRotator EnemeySpawnRotation;
+
+	UPROPERTY(EditAnywhere)
+		UClass* SpawnEnemy;
+
+	AActor* EnemyActor;
+	AEnemy* EnemyClass;
 	
 protected:
 	// Called when the game starts or when spawned
