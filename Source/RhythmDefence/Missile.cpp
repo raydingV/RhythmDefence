@@ -88,7 +88,7 @@ void AMissile::ActArrow(float DeltaTime, float speed)
 		TargetRotation.Roll += 50 * DeltaTime;
 	}
 	
-	if(GetActorLocation().Z <= 170)
+	if(GetActorLocation().Z <= 435)
 	{
 		MeshComponent->SetSimulatePhysics(false);
 		MeshComponent->WakeRigidBody();
@@ -107,7 +107,7 @@ void AMissile::ActFire(float DeltaTime)
 	
 	TargetRotation = FMath::Lerp(GetActorRotation(), NewLocation.Rotation(), DeltaTime * 2);
 
-	if(GetActorLocation().Z <= 170)
+	if(GetActorLocation().Z <= 435)
 	{
 		this->Destroy();
 	}
@@ -120,8 +120,8 @@ void AMissile::ActLog(float _DeltaTime)
 		if(GetActorLocation().Y <= 120)
 		{
 			CanTrigger = true;
-			TargetLocation.Z = 170;
-			if(GetActorLocation().Z <= 170)
+			TargetLocation.Z = 435;
+			if(GetActorLocation().Z <= 435)
 			{
 				if(GetActorLocation().Y >= -2200)
 				{
@@ -141,7 +141,7 @@ void AMissile::ActLog(float _DeltaTime)
 	else
 	{
 		CanTrigger = false;
-		if(GetActorLocation().Z <= 170)
+		if(GetActorLocation().Z <= 435)
 		{
 			this->Destroy();
 		}

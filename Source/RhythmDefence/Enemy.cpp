@@ -14,15 +14,31 @@ AEnemy::AEnemy()
 
 	RootComponent = Mesh;
 	SetTransform = false;
-	TagOfEnemey = -1;
+	TagOfEnemy = -1;
 
 	hitByLog = false;
+	hitCastle = false;
 }
 
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if(TagOfEnemy == 0)
+	{
+		AttackTimeDown = 1;
+	}
+	
+	if(TagOfEnemy == 1)
+	{
+		AttackTimeDown = 3;
+	}
+	
+	if(TagOfEnemy == 2)
+	{
+		AttackTimeDown = 6;
+	}
 }
 
 // Called every frame
@@ -101,7 +117,7 @@ void AEnemy::HitByMissile(AActor* _MissileClass)
 
 void AEnemy::TransformActor()
 {
-	if(TagOfEnemey == 0)
+	if(TagOfEnemy == 0)
 	{
 		SetActorRotation(FRotator3d(0,0,-270));
 	}
@@ -111,11 +127,63 @@ void AEnemy::TransformActor()
 		SetActorRotation(FRotator3d(0,0,0));
 	}
 	
-	TargetLocation = FVector3d(GetActorLocation().X,GetActorLocation().Y + 1800, GetActorLocation().Z);
+	TargetLocation = FVector3d(GetActorLocation().X,GetActorLocation().Y + 2800, GetActorLocation().Z);
 	FirstLocation = TargetLocation;
 	
 	SetTransform = true;
 }
+
+float AEnemy::HitToCastle(float _Health)
+{
+	if(TagOfEnemy == 0)
+	{
+		_Health -= 1;
+	}
+
+	if(TagOfEnemy == 1)
+	{
+		_Health -= 8;
+	}
+
+	if(TagOfEnemy == 2)
+	{
+		_Health -= 30;
+	}
+
+	return _Health;
+}
+
+bool AEnemy::ArriveCastle()
+{
+	if(GetActorLocation().Y >= -560)
+	{
+		hitCastle = true;
+	}
+
+	return hitCastle;
+}
+
+void AEnemy::SetTimeAttack()
+{
+	if(TagOfEnemy == 0)
+	{
+		AttackTimeDown = 1;
+	}
+	
+	if(TagOfEnemy == 1)
+	{
+		AttackTimeDown = 3;
+	}
+	
+	if(TagOfEnemy == 2)
+	{
+		AttackTimeDown = 6;
+	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("TagOfEnemy: %d"), TagOfEnemy);
+}
+
+
 
 
 

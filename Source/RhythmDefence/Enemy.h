@@ -22,6 +22,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HitByMissile(AActor* _MissileClass);
 
+	UFUNCTION(BlueprintCallable)
+		float HitToCastle(float _Health);
+
+	UFUNCTION(BlueprintCallable)
+		bool ArriveCastle();
+
+	UFUNCTION()
+		void SetTimeAttack();
+
+	UFUNCTION()
+		void TransformActor();
+
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* Mesh;
 
@@ -43,13 +55,14 @@ public:
 
 	FRotator TargetRotation;
 
-	int TagOfEnemey;
-
-	UFUNCTION()
-		void TransformActor();
-
+	int TagOfEnemy;
+	
+	UPROPERTY(BlueprintReadOnly)
+		int AttackTimeDown;
+	
 	bool SetTransform;
 	bool hitByLog;
+	bool hitCastle;
 
 protected:
 	// Called when the game starts or when spawned

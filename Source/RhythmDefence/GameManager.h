@@ -49,6 +49,9 @@ public:
 
 	int RandomEnemy;
 
+	UPROPERTY(BlueprintReadWrite)
+		float HealthOfCastle;
+	
 	float SpawnTime;
 
 	UPROPERTY(EditAnywhere)
