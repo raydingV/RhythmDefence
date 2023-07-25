@@ -37,8 +37,14 @@ public:
 	UFUNCTION()
 		void SpawnEnemys(float _deltaTime);
 
+	UFUNCTION(BlueprintCallable)
+		void ResetCharge();
+
 	bool ChargeSoldier;
 	bool CanMakeCombo;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool ToResetCharge;
 
 	int ChargeSoldierTag;
 

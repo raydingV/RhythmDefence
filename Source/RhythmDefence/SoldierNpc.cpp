@@ -14,6 +14,9 @@ ASoldierNpc::ASoldierNpc()
 	SingleFire = true;
 
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
+	RootComponent = Mesh;
+
+	IsAttacking = false;
 }
 
 // Called when the game starts or when spawned
@@ -31,6 +34,10 @@ void ASoldierNpc::BeginPlay()
 	{
 		ParentClass->SoldierArray.Push(this);
 	}
+
+	SetActorRotation(FRotator3d(0,180,0));
+	
+	_TagOfSoldier = ParentClass->TagOfSoldier;
 }
 
 // Called every frame
@@ -41,6 +48,8 @@ void ASoldierNpc::Tick(float DeltaTime)
 	SoldierArrow();
 	SoldierFire();
 	SoldierLog();
+	
+	OldLocation = GetActorLocation();
 }
 
 void ASoldierNpc::SoldierArrow()
@@ -52,6 +61,7 @@ void ASoldierNpc::SoldierArrow()
 			if(GameManagerClass->ButtonBInput == 2 && GameManagerClass->ButtonXInput == 1)
 			{
 				SingleFire = ParentClass->SoldierCanFire;
+				IsAttacking = true;
 				if(MissileSpawn != nullptr && SingleFire == true)
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
@@ -65,6 +75,7 @@ void ASoldierNpc::SoldierArrow()
 			if(GameManagerClass->ButtonAInput == 2 && GameManagerClass->ButtonXInput == 1)
 			{
 				SingleFire = ParentClass->SoldierCanFire;
+				IsAttacking = true;
 				if(MissileSpawn != nullptr && SingleFire == true)
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
@@ -87,6 +98,7 @@ void ASoldierNpc::SoldierFire()
 			if(GameManagerClass->ButtonAInput == 2 && GameManagerClass->ButtonXInput == 1)
 			{
 				SingleFire = ParentClass->SoldierCanFire;
+				IsAttacking = true;
 				if(MissileSpawn != nullptr && SingleFire == true)
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(GetActorLocation().X,GetActorLocation().Y - 1120,960), FRotator3d(0,180,180), SpawnParameters);
@@ -102,6 +114,7 @@ void ASoldierNpc::SoldierFire()
 			if(GameManagerClass->ButtonBInput == 2 && GameManagerClass->ButtonXInput == 1)
 			{
 				SingleFire = ParentClass->SoldierCanFire;
+				IsAttacking = true;
 				if(MissileSpawn != nullptr && SingleFire == true)
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
@@ -125,6 +138,7 @@ void ASoldierNpc::SoldierLog()
 			if(GameManagerClass->ButtonAInput == 2 && GameManagerClass->ButtonXInput == 1)
 			{
 				SingleFire = ParentClass->SoldierCanFire;
+				IsAttacking = true;
 				if(MissileSpawn != nullptr && SingleFire == true)
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
@@ -141,6 +155,7 @@ void ASoldierNpc::SoldierLog()
 			if(GameManagerClass->ButtonBInput == 2 && GameManagerClass->ButtonXInput == 1)
 			{
 				SingleFire = ParentClass->SoldierCanFire;
+				IsAttacking = true;
 				if(MissileSpawn != nullptr && SingleFire == true)
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
@@ -157,6 +172,24 @@ void ASoldierNpc::SoldierLog()
 		}
 	}
 }
+
+bool ASoldierNpc::IsWalking()
+{
+	if(OldLocation.Y != GetActorLocation().Y)
+	{
+		if(ParentClass->IsFırstLocation == true && ParentClass->FirstLocation.Y > ParentClass->CurrentLocation.Y)
+		{
+			SetActorRotation(FRotator3d(0,0,0));	
+		}
+		return true;
+	}
+	else
+	{
+		SetActorRotation(FRotator3d(0,180,0));
+		return false;
+	}
+}
+
 
 
 

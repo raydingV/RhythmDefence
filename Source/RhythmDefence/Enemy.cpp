@@ -119,11 +119,11 @@ void AEnemy::TransformActor()
 {
 	if(TagOfEnemy == 0)
 	{
-		SetActorRotation(FRotator3d(0,0,-270));
+		SetActorRotation(FRotator3d(0,0,0));
 	}
 	else
 	{
-		SetActorLocation(FVector3d(GetActorLocation().X, GetActorLocation().Y, 150));
+		SetActorLocation(FVector3d(GetActorLocation().X, GetActorLocation().Y, 430));
 		SetActorRotation(FRotator3d(0,0,0));
 	}
 	

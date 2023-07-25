@@ -74,6 +74,7 @@ void ANpcSoldierParent::TransformToObject(float DeltaTime, bool GetFirstLocation
 		SetActorLocation(NewLocation);
 	}
 
+	IsFırstLocation = GetFirstLocation;
 	SetActorRotation(TargetRotation);
 }
 

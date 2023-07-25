@@ -45,6 +45,7 @@ public:
 	TArray<AActor*>SoldierArray;
 
 	bool SoldierCanFire;
+	bool IsFırstLocation;
 
 protected:
 	// Called when the game starts or when spawned

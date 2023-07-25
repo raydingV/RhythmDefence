@@ -101,14 +101,21 @@ void AGameManager::ButtonY()
 
 void AGameManager::ResetAll()
 {
-	ChargeSoldierTag = 0;
 	ButtonXInput = 0;
 	ButtonAInput = 0;
 	ButtonBInput = 0;
 	ButtonYInput = 0;
+	ToResetCharge = true;
+}
+
+void AGameManager::ResetCharge()
+{
+	ChargeSoldierTag = 0;
 	ChargeSoldier = false;
 	CanMakeCombo = false;
+	ToResetCharge = false;
 }
+
 
 void AGameManager::SpawnEnemys(float _deltaTime)
 {

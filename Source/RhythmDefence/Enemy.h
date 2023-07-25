@@ -34,7 +34,7 @@ public:
 	UFUNCTION()
 		void TransformActor();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere)
@@ -55,6 +55,7 @@ public:
 
 	FRotator TargetRotation;
 
+	UPROPERTY(BlueprintReadOnly)
 	int TagOfEnemy;
 	
 	UPROPERTY(BlueprintReadOnly)

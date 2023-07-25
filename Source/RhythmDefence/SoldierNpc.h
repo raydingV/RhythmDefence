@@ -28,7 +28,7 @@ public:
 	AActor* Arrow;
 	AMissile* ArrowClass;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		USkeletalMeshComponent* Mesh;
 	
 	FActorSpawnParameters SpawnParameters;
@@ -36,7 +36,17 @@ public:
 	UPROPERTY(EditAnywhere)
 	UClass* MissileSpawn;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	int _TagOfSoldier;
+
+	UPROPERTY(BlueprintReadOnly)
 	bool SingleFire;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool IsAttacking;
+
+	UFUNCTION(BlueprintCallable)
+		bool IsWalking();
 
 	UFUNCTION()
 		void SoldierArrow();
@@ -46,6 +56,8 @@ public:
 
 	UFUNCTION()
 		void SoldierLog();
+
+	FVector OldLocation;
 
 protected:
 	// Called when the game starts or when spawned
