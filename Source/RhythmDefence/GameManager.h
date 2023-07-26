@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Enemy.h"
+#include "EnemyCheck.h"
 #include "GameFramework/Actor.h"
 #include "GameManager.generated.h"
 
@@ -40,6 +41,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ResetCharge();
 
+	UFUNCTION()
+		void ResetDefault();
+
+	UFUNCTION()
+		void NewRound();
+
 	bool ChargeSoldier;
 	bool CanMakeCombo;
 
@@ -55,11 +62,20 @@ public:
 
 	int RandomEnemy;
 
+	int EnemySpawnNum;
+	int SpawnNumForRound;
+	int MaxSpawn;
+	int DefaultMaxSpawn;
+	
+	int Min;
+	int Max;
+
 	UPROPERTY(BlueprintReadWrite)
 		float HealthOfCastle;
 	
 	float SpawnTime;
-
+	float WaitForNewRound;
+	
 	UPROPERTY(EditAnywhere)
 		FVector EnemySpawnLocation;
 	UPROPERTY(EditAnywhere)
@@ -70,6 +86,9 @@ public:
 
 	AActor* EnemyActor;
 	AEnemy* EnemyClass;
+
+	AActor* EnemyCheckActor;
+	AEnemyCheck* EnemyCheckClass;
 	
 protected:
 	// Called when the game starts or when spawned

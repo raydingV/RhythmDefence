@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EnemyCheck.h"
 #include "Missile.h"
 #include "GameFramework/Actor.h"
 #include "Enemy.generated.h"
@@ -19,6 +20,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		AMissile* MissileClass;
 
+	AActor* EnemyCheckActor;
+	AEnemyCheck* EnemyCheckClass;
+
 	UFUNCTION(BlueprintCallable)
 	void HitByMissile(AActor* _MissileClass);
 
@@ -34,12 +38,22 @@ public:
 	UFUNCTION()
 		void TransformActor();
 
+	UFUNCTION(BlueprintCallable)
+		void HitByLava();
+
+	UFUNCTION(BlueprintCallable)
+		void DefaultSpeed();
+
+	UFUNCTION()
+		void SetSpeed();
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere)
 	TArray<USkeletalMesh*> MeshArray;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	int Health;
 
 	UPROPERTY(EditAnywhere)
@@ -64,6 +78,10 @@ public:
 	bool SetTransform;
 	bool hitByLog;
 	bool hitCastle;
+	
+	float Speed;
+	float FirstSpeed;
+	
 
 protected:
 	// Called when the game starts or when spawned

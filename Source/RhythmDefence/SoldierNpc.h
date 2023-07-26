@@ -39,6 +39,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	int _TagOfSoldier;
 
+	float Waiter;
+
 	UPROPERTY(BlueprintReadOnly)
 	bool SingleFire;
 
@@ -58,6 +60,7 @@ public:
 		void SoldierLog();
 
 	FVector OldLocation;
+	FVector FirstLocation;
 
 protected:
 	// Called when the game starts or when spawned

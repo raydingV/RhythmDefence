@@ -3,6 +3,8 @@
 
 #include "Enemy.h"
 
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 AEnemy::AEnemy()
 {
@@ -18,27 +20,20 @@ AEnemy::AEnemy()
 
 	hitByLog = false;
 	hitCastle = false;
+
+	Speed = 150;
 }
 
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	Mesh->SetSkeletalMesh(MeshArray[TagOfEnemy]);
+	SetTimeAttack();
+	SetSpeed();
 
-	if(TagOfEnemy == 0)
-	{
-		AttackTimeDown = 1;
-	}
-	
-	if(TagOfEnemy == 1)
-	{
-		AttackTimeDown = 3;
-	}
-	
-	if(TagOfEnemy == 2)
-	{
-		AttackTimeDown = 6;
-	}
+	EnemyCheckActor = Cast<AEnemyCheck>(UGameplayStatics::GetActorOfClass(GetWorld(), AEnemyCheck::StaticClass()));
+	EnemyCheckClass = Cast<AEnemyCheck>(EnemyCheckActor);
 }
 
 // Called every frame
@@ -51,7 +46,7 @@ void AEnemy::Tick(float DeltaTime)
 		CurrentLocation = GetActorLocation();
 	
 		Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
-		NewLocation = CurrentLocation + (Direction * 150 * DeltaTime);
+		NewLocation = CurrentLocation + (Direction * Speed * DeltaTime);
 
 		SetActorLocation(NewLocation);
 	}
@@ -76,6 +71,7 @@ void AEnemy::Tick(float DeltaTime)
 	
 	if(Health <= 0)
 	{
+		EnemyCheckClass->EnemyArr.Remove(this);
 		this->Destroy();
 	}
 
@@ -179,9 +175,29 @@ void AEnemy::SetTimeAttack()
 	{
 		AttackTimeDown = 6;
 	}
-	
-	UE_LOG(LogTemp, Warning, TEXT("TagOfEnemy: %d"), TagOfEnemy);
 }
+
+void AEnemy::SetSpeed()
+{
+	if(TagOfEnemy == 2)
+	{
+		Speed = 90;
+	}
+
+	FirstSpeed = Speed;
+}
+
+
+void AEnemy::HitByLava()
+{
+	Speed /= 2;
+}
+
+void AEnemy::DefaultSpeed()
+{
+	Speed = FirstSpeed;
+}
+
 
 
 

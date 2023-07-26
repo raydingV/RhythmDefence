@@ -34,9 +34,9 @@ void AMissile::BeginPlay()
 	InitialVelocity = FVector(0.f, 1000.f, 1000.f); // İleri hız ve yükseklik
 	Acceleration = FVector(0.f, 0.f, -980.f);
 	Gravity = 980.f;
-	
+
+	TargetRotation = FRotator(0,0,-140);
 	NewLocation = GetActorLocation();
-	TargetRotation = FRotator3d(0,-180,-70);
 }
 
 // Called every frame
@@ -63,29 +63,30 @@ void AMissile::Tick(float DeltaTime)
 	
 	if(SetRotation == true)
 	{
-		SetActorRotation(TargetRotation);
+		MeshComponent->SetRelativeRotation(TargetRotation);
 	}
 
 }
 
 void AMissile::ActArrow(float DeltaTime, float speed)
 {
-	// N şekline fizik uygula.
+	// N physic
 	MeshComponent->SetSimulatePhysics(true);
 	MeshComponent->WakeRigidBody();
 	
-	// Hesaplamaları güncelle.
 	ElapsedTime += DeltaTime;
 	
-	// Yükseklik hesaplaması.
+	// Height Calculation
 	float Height = StartLocation.Z + (InitialVelocity.Z * ElapsedTime) + (0.5f * Acceleration.Z * FMath::Square(ElapsedTime));
 	NewLocation.Z = Height;
 
 	NewLocation.Y -= speed * DeltaTime;
+	// TargetRotation.Pitch = 150;
+	// TargetRotation.Yaw = 340;
 
-	if(TargetRotation.Roll <= 40)
+	if(TargetRotation.Roll <= 110)
 	{
-		TargetRotation.Roll += 50 * DeltaTime;
+		TargetRotation.Roll -= 40 * DeltaTime;
 	}
 	
 	if(GetActorLocation().Z <= 435)
@@ -143,6 +144,7 @@ void AMissile::ActLog(float _DeltaTime)
 		CanTrigger = false;
 		if(GetActorLocation().Z <= 435)
 		{
+			GetWorld()->SpawnActor<AActor>(Lava, GetActorLocation(), FRotator3d(0,0,0));
 			this->Destroy();
 		}
 		TargetRotation = FRotator3d(TargetRotation.Pitch + (300 * _DeltaTime),TargetRotation.Yaw + (300 * _DeltaTime),TargetRotation.Roll + (300 * _DeltaTime));

@@ -20,6 +20,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<UStaticMesh*> MeshArray;
+
+	UPROPERTY(EditAnywhere)
+		UClass* Lava;
 	
 	UFUNCTION()
 		void ActArrow(float DeltaTime, float Speed);

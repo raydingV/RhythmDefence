@@ -3,6 +3,8 @@
 
 #include "GameManager.h"
 
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 AGameManager::AGameManager()
 {
@@ -13,13 +15,24 @@ AGameManager::AGameManager()
 
 	ChargeSoldierTag = 0;
 	HealthOfCastle = 100;
+
+	DefaultMaxSpawn = 3;
+	SpawnNumForRound = 4;
+	Min = 240;
+	Max = 420;
+	WaitForNewRound = 240;
 }
 
 // Called when the game starts or when spawned
 void AGameManager::BeginPlay()
 {
 	Super::BeginPlay();
-	SpawnTime = FMath::RandRange(180,360);
+	SpawnTime = FMath::RandRange(120,180);
+
+	EnemyCheckActor = Cast<AEnemyCheck>(UGameplayStatics::GetActorOfClass(GetWorld(), AEnemyCheck::StaticClass()));
+	EnemyCheckClass = Cast<AEnemyCheck>(EnemyCheckActor);
+
+	MaxSpawn = DefaultMaxSpawn;
 }
 
 // Called every frame
@@ -37,9 +50,9 @@ void AGameManager::ChargeSoldiers()
 
 void AGameManager::ButtonX()
 {
-	if(ChargeSoldier != true && (ButtonAInput == 0 && ButtonBInput == 0))
+	if(ChargeSoldier != true && (ButtonAInput == 0 && ButtonBInput == 0) && ChargeSoldierTag == 0)
 	{
-		ChargeSoldierTag = 0;
+		UE_LOG(LogTemp, Warning, TEXT("CHARGE"));
 		ChargeSoldiers();
 	}
 	else if(ButtonAInput == 2 || ButtonBInput == 2)
@@ -48,7 +61,7 @@ void AGameManager::ButtonX()
 	}
 	else
 	{
-		ResetAll();
+		ResetDefault();
 	}
 }
 
@@ -65,7 +78,7 @@ void AGameManager::ButtonA()
 	}
 	else
 	{
-		ResetAll();
+		ResetDefault();
 	}
 }
 
@@ -82,7 +95,7 @@ void AGameManager::ButtonB()
 	}
 	else
 	{
-		ResetAll();
+		ResetDefault();
 	}
 }
 
@@ -95,7 +108,7 @@ void AGameManager::ButtonY()
 	}
 	else
 	{
-		ResetAll();
+		ResetDefault();
 	}
 }
 
@@ -116,24 +129,86 @@ void AGameManager::ResetCharge()
 	ToResetCharge = false;
 }
 
+void AGameManager::ResetDefault()
+{
+	ButtonXInput = 0;
+	ButtonAInput = 0;
+	ButtonBInput = 0;
+	ButtonYInput = 0;
+	ChargeSoldierTag = 0;
+	ChargeSoldier = false;
+	CanMakeCombo = false;
+}
+
+
 
 void AGameManager::SpawnEnemys(float _deltaTime)
 {
 	SpawnTime -= 1;
 
-	if(SpawnTime <= 0)
+	if(SpawnTime <= 0 && MaxSpawn > 0)
 	{
 		RandomEnemy = FMath::RandRange(0,2);
+
+		if(RandomEnemy == 2)
+		{
+			EnemySpawnNum = 1;
+		}
+		else
+		{
+			EnemySpawnNum = SpawnNumForRound;
+		}
 		
-		EnemyActor = GetWorld()->SpawnActor<AActor>(SpawnEnemy, GetActorLocation(), GetActorRotation());
-		EnemyClass = Cast<AEnemy>(EnemyActor);
-		EnemyClass->TagOfEnemy = RandomEnemy;
-		EnemyClass->SetTimeAttack();
-		EnemyClass->Mesh->SetSkeletalMesh(EnemyClass->MeshArray[RandomEnemy]);
+		for(int i = 0; i < EnemySpawnNum; i++)
+		{
+			FVector TranslationActor = FVector(FMath::RandRange(-250,20), FMath::RandRange(GetActorLocation().Y, GetActorLocation().Y + 100), GetActorLocation().Z);
+			FTransform TransformActor = FTransform(GetActorRotation(), TranslationActor, FVector3d(1,1,1));
+			EnemyActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnEnemy, GetActorTransform());
+			EnemyClass = Cast<AEnemy>(EnemyActor);
+			EnemyClass->TagOfEnemy = RandomEnemy;
+			EnemyCheckClass->EnemyArr.Push(EnemyActor);
+			EnemyActor->FinishSpawning(TransformActor);
+		}
 		
-		SpawnTime = FMath::RandRange(180,360);
+		SpawnTime = FMath::RandRange(Min,Max);
+		MaxSpawn--;
+	}
+
+	if(MaxSpawn == 0 && EnemyCheckClass->EnemyArr.IsEmpty())
+	{
+		WaitForNewRound -= 1;
+	}
+
+	if(WaitForNewRound <= 0)
+	{
+		NewRound();
 	}
 }
+
+void AGameManager::NewRound()
+{
+	WaitForNewRound = 240;
+	DefaultMaxSpawn += 2;
+	MaxSpawn = DefaultMaxSpawn;
+
+	if(Min <= 120)
+	{
+		Min -= 60;
+	}
+
+	if(Max <= 240)
+	{
+		Max -= 60;
+	}
+
+	if(SpawnNumForRound <= 14)
+	{
+		SpawnNumForRound += 2;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("NewRound"));
+}
+
 
 
 

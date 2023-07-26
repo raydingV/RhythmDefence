@@ -17,6 +17,8 @@ ASoldierNpc::ASoldierNpc()
 	RootComponent = Mesh;
 
 	IsAttacking = false;
+	Waiter = 60;
+	SingleFire = false;
 }
 
 // Called when the game starts or when spawned
@@ -38,18 +40,26 @@ void ASoldierNpc::BeginPlay()
 	SetActorRotation(FRotator3d(0,180,0));
 	
 	_TagOfSoldier = ParentClass->TagOfSoldier;
+	
+	FirstLocation = GetActorLocation();
 }
 
 // Called every frame
 void ASoldierNpc::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
+	OldLocation = GetActorLocation();
+	
 	SoldierArrow();
 	SoldierFire();
 	SoldierLog();
-	
-	OldLocation = GetActorLocation();
+
+	if(IsAttacking == true)
+	{
+		Waiter -= 1;
+		UE_LOG(LogTemp,Warning,TEXT("%d"), Waiter);
+	}
 }
 
 void ASoldierNpc::SoldierArrow()
@@ -62,13 +72,14 @@ void ASoldierNpc::SoldierArrow()
 			{
 				SingleFire = ParentClass->SoldierCanFire;
 				IsAttacking = true;
-				if(MissileSpawn != nullptr && SingleFire == true)
+				if(MissileSpawn != nullptr && SingleFire == true && Waiter <= 0)
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
 					ArrowClass = Cast<AMissile>(Arrow);
 					ArrowClass->Arrow = true;
-					ArrowClass->Speed = 1500;
+					ArrowClass->Speed = 1600;
 					ParentClass->SoldierFireArray.Push(Arrow);
+					Waiter = 60;
 				}
 			}
 
@@ -76,13 +87,14 @@ void ASoldierNpc::SoldierArrow()
 			{
 				SingleFire = ParentClass->SoldierCanFire;
 				IsAttacking = true;
-				if(MissileSpawn != nullptr && SingleFire == true)
+				if(MissileSpawn != nullptr && SingleFire == true && Waiter <= 0)
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
 					ArrowClass = Cast<AMissile>(Arrow);
 					ArrowClass->Arrow = true;
-					ArrowClass->Speed = 300;
+					ArrowClass->Speed = 600;
 					ParentClass->SoldierFireArray.Push(Arrow);
+					Waiter = 60;
 				}
 			}
 		}
@@ -99,7 +111,7 @@ void ASoldierNpc::SoldierFire()
 			{
 				SingleFire = ParentClass->SoldierCanFire;
 				IsAttacking = true;
-				if(MissileSpawn != nullptr && SingleFire == true)
+				if(MissileSpawn != nullptr && SingleFire == true && Waiter <= 0)
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(GetActorLocation().X,GetActorLocation().Y - 1120,960), FRotator3d(0,180,180), SpawnParameters);
 					ArrowClass = Cast<AMissile>(Arrow);
@@ -108,6 +120,7 @@ void ASoldierNpc::SoldierFire()
 					ArrowClass->Fire = true;
 					ArrowClass->Speed = 1000;
 					ParentClass->SoldierFireArray.Push(Arrow);
+					Waiter = 60;
 				}
 			}
 
@@ -115,7 +128,7 @@ void ASoldierNpc::SoldierFire()
 			{
 				SingleFire = ParentClass->SoldierCanFire;
 				IsAttacking = true;
-				if(MissileSpawn != nullptr && SingleFire == true)
+				if(MissileSpawn != nullptr && SingleFire == true && Waiter <= 0)
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
 					ArrowClass = Cast<AMissile>(Arrow);
@@ -123,6 +136,7 @@ void ASoldierNpc::SoldierFire()
 					ArrowClass->Fire = true;
 					ArrowClass->Speed = 2000;
 					ParentClass->SoldierFireArray.Push(Arrow);
+					Waiter = 60;
 				}
 			}
 		}
@@ -139,9 +153,9 @@ void ASoldierNpc::SoldierLog()
 			{
 				SingleFire = ParentClass->SoldierCanFire;
 				IsAttacking = true;
-				if(MissileSpawn != nullptr && SingleFire == true)
+				if(MissileSpawn != nullptr && SingleFire == true && Waiter <= 0)
 				{
-					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
+					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(GetActorLocation().X, GetActorLocation().Y - 200, GetActorLocation().Z), GetActorRotation(), SpawnParameters);
 					Arrow->SetActorScale3D(FVector3d(1,1,1));
 					ArrowClass = Cast<AMissile>(Arrow);
 					ArrowClass->TargetLocation = FVector3d(-290,50,820);
@@ -149,6 +163,7 @@ void ASoldierNpc::SoldierLog()
 					ArrowClass->Speed = 1000;
 					ArrowClass->MeshComponent->SetStaticMesh(ArrowClass->MeshArray[0]);
 					ParentClass->SoldierFireArray.Push(Arrow);
+					Waiter = 60;
 				}
 			}
 
@@ -156,17 +171,18 @@ void ASoldierNpc::SoldierLog()
 			{
 				SingleFire = ParentClass->SoldierCanFire;
 				IsAttacking = true;
-				if(MissileSpawn != nullptr && SingleFire == true)
+				if(MissileSpawn != nullptr && SingleFire == true && Waiter <= 0)
 				{
-					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
+					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(GetActorLocation().X, GetActorLocation().Y - 200, GetActorLocation().Z + 200), GetActorRotation(), SpawnParameters);
 					Arrow->SetActorScale3D(FVector3d(1,1,1));
 					ArrowClass = Cast<AMissile>(Arrow);
-					ArrowClass->TargetLocation = FVector3d(GetActorLocation().X,-1590,170);
+					ArrowClass->TargetLocation = FVector3d(GetActorLocation().X,-3000,170);
 					ArrowClass->Log = true;
 					ArrowClass->Crate = true;
 					ArrowClass->Speed = 1500;
 					ArrowClass->MeshComponent->SetStaticMesh(ArrowClass->MeshArray[1]);
 					ParentClass->SoldierFireArray.Push(Arrow);
+					Waiter = 60;
 				}
 			}
 		}
@@ -179,7 +195,11 @@ bool ASoldierNpc::IsWalking()
 	{
 		if(ParentClass->IsFırstLocation == true && ParentClass->FirstLocation.Y > ParentClass->CurrentLocation.Y)
 		{
-			SetActorRotation(FRotator3d(0,0,0));	
+			SetActorRotation(FRotator3d(0,0,0));
+		}
+		else
+		{
+			SetActorRotation(FRotator3d(0,180,0));
 		}
 		return true;
 	}
