@@ -76,6 +76,7 @@ void ASoldierNpc::SoldierArrow()
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
 					ArrowClass = Cast<AMissile>(Arrow);
+					ArrowClass->MeshComponent->SetStaticMesh(ArrowClass->MeshArray[2]);
 					ArrowClass->Arrow = true;
 					ArrowClass->Speed = 1600;
 					ParentClass->SoldierFireArray.Push(Arrow);
@@ -91,6 +92,7 @@ void ASoldierNpc::SoldierArrow()
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
 					ArrowClass = Cast<AMissile>(Arrow);
+					ArrowClass->MeshComponent->SetStaticMesh(ArrowClass->MeshArray[2]);
 					ArrowClass->Arrow = true;
 					ArrowClass->Speed = 600;
 					ParentClass->SoldierFireArray.Push(Arrow);
@@ -115,6 +117,7 @@ void ASoldierNpc::SoldierFire()
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(GetActorLocation().X,GetActorLocation().Y - 1120,960), FRotator3d(0,180,180), SpawnParameters);
 					ArrowClass = Cast<AMissile>(Arrow);
+					ArrowClass->Meteor = true;
 					ArrowClass->TargetLocation = FVector3d(GetActorLocation().X,Arrow->GetActorLocation().Y,170);
 					ArrowClass->SetRotation = false;
 					ArrowClass->Fire = true;

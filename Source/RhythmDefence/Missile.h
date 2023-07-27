@@ -32,7 +32,7 @@ public:
 
 	UFUNCTION()
 		void ActLog(float _DeltaTime);
-
+	
 	FVector TargetLocation;
 	FVector CurrentLocation;
 	FVector StartLocation;
@@ -59,6 +59,8 @@ public:
 		bool Log;
 	UPROPERTY(BlueprintReadOnly)
 		bool CanTrigger;
+	UPROPERTY(BlueprintReadOnly)
+		bool Meteor;
 	
 	bool SetRotation;
 	bool Crate;
