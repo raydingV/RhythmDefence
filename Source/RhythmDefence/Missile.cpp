@@ -118,15 +118,16 @@ void AMissile::ActLog(float _DeltaTime)
 {
 	if(Crate == false)
 	{
+		SetActorScale3D(FVector(3,3,3));
 		if(GetActorLocation().Y <= 120)
 		{
 			CanTrigger = true;
 			TargetLocation.Z = 435;
 			if(GetActorLocation().Z <= 435)
 			{
-				if(GetActorLocation().Y >= -2200)
+				if(GetActorLocation().Y >= -3500)
 				{
-					TargetLocation = FVector3d(GetActorLocation().X, -2200, GetActorLocation().Z);
+					TargetLocation = FVector3d(GetActorLocation().X, -3500, GetActorLocation().Z);
 				}
 				else
 				{

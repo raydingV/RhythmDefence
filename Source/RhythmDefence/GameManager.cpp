@@ -50,12 +50,12 @@ void AGameManager::ChargeSoldiers()
 
 void AGameManager::ButtonX()
 {
-	if(ChargeSoldier != true && (ButtonAInput == 0 && ButtonBInput == 0) && ChargeSoldierTag == 0)
+	if(ChargeSoldier != true && (ButtonAInput == 0 && ButtonBInput == 0 && ButtonYInput == 0) && ChargeSoldierTag == 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("CHARGE"));
 		ChargeSoldiers();
 	}
-	else if(ButtonAInput == 2 || ButtonBInput == 2)
+	else if(ButtonAInput == 2)
 	{
 		ButtonXInput++;
 	}
@@ -72,7 +72,7 @@ void AGameManager::ButtonA()
 		ChargeSoldierTag = 1;
 		ChargeSoldier = false;
 	}
-	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonBInput == 0 && ButtonAInput < 2)
+	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonBInput == 0 && ButtonYInput == 0 && ButtonAInput < 2)
 	{
 		ButtonAInput++;
 	}
@@ -89,7 +89,7 @@ void AGameManager::ButtonB()
 		ChargeSoldierTag = 2;
 		ChargeSoldier = false;
 	}
-	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonAInput == 0 && ButtonBInput < 2)
+	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonAInput == 2 && ButtonBInput < 1)
 	{
 		ButtonBInput++;
 	}
@@ -105,6 +105,10 @@ void AGameManager::ButtonY()
 	{
 		ChargeSoldierTag = 3;
 		ChargeSoldier = false;
+	}
+	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonAInput == 2 && ButtonYInput < 1 && ChargeSoldierTag == 2)
+	{
+		ButtonYInput++;
 	}
 	else
 	{
@@ -161,7 +165,7 @@ void AGameManager::SpawnEnemys(float _deltaTime)
 		
 		for(int i = 0; i < EnemySpawnNum; i++)
 		{
-			FVector TranslationActor = FVector(FMath::RandRange(-250,20), FMath::RandRange(GetActorLocation().Y, GetActorLocation().Y + 100), GetActorLocation().Z);
+			FVector TranslationActor = FVector(FMath::RandRange(-400,400), FMath::RandRange(GetActorLocation().Y, GetActorLocation().Y + 100), GetActorLocation().Z);
 			FTransform TransformActor = FTransform(GetActorRotation(), TranslationActor, FVector3d(1,1,1));
 			EnemyActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnEnemy, GetActorTransform());
 			EnemyClass = Cast<AEnemy>(EnemyActor);

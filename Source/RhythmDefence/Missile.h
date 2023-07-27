@@ -15,7 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	AMissile();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 		UStaticMeshComponent* MeshComponent;
 
 	UPROPERTY(EditAnywhere)
