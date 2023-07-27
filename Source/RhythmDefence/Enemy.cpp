@@ -89,7 +89,20 @@ void AEnemy::HitByMissile(AActor* _MissileClass)
 	{
 		if(MissileClass->Arrow == true && MissileClass->CanTrigger == true)
 		{
-			Health -= 15;
+			if(TagOfEnemy == 0)
+			{
+				Health -= 50;
+			}
+			
+			if(TagOfEnemy == 1)
+			{
+				Health -= 50;
+			}
+
+			if(TagOfEnemy == 2)
+			{
+				Health -= 15;
+			}
 		}
 
 		if(MissileClass->Fire == true)
@@ -99,7 +112,15 @@ void AEnemy::HitByMissile(AActor* _MissileClass)
 
 		if(MissileClass->Log == true && MissileClass->Crate == false)
 		{
-			Health -= 10;
+			if(TagOfEnemy == 1)
+			{
+				Health -= 100;
+			}
+			else
+			{
+				Health -= 10;
+			}
+		
 			TargetLocation.Y = GetActorLocation().Y - 200;
 			hitByLog = true;
 		}
@@ -154,6 +175,10 @@ bool AEnemy::ArriveCastle()
 	if(GetActorLocation().Y >= -560)
 	{
 		hitCastle = true;
+	}
+	else
+	{
+		hitCastle = false;
 	}
 
 	return hitCastle;

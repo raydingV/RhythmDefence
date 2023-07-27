@@ -68,7 +68,7 @@ void ASoldierNpc::SoldierArrow()
 	{
 		if(GameManagerClass->ChargeSoldierTag == ParentClass->TagOfSoldier)
 		{
-			if(GameManagerClass->ButtonBInput == 2 && GameManagerClass->ButtonXInput == 1)
+			if(GameManagerClass->ButtonAInput == 2 && GameManagerClass->ButtonYInput == 1)
 			{
 				SingleFire = ParentClass->SoldierCanFire;
 				IsAttacking = true;
@@ -124,7 +124,7 @@ void ASoldierNpc::SoldierFire()
 				}
 			}
 
-			if(GameManagerClass->ButtonBInput == 2 && GameManagerClass->ButtonXInput == 1)
+			if(GameManagerClass->ButtonAInput == 2 && GameManagerClass->ButtonBInput == 1)
 			{
 				SingleFire = ParentClass->SoldierCanFire;
 				IsAttacking = true;
@@ -155,10 +155,10 @@ void ASoldierNpc::SoldierLog()
 				IsAttacking = true;
 				if(MissileSpawn != nullptr && SingleFire == true && Waiter <= 0)
 				{
-					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(GetActorLocation().X, GetActorLocation().Y - 200, GetActorLocation().Z), GetActorRotation(), SpawnParameters);
+					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(-490, GetActorLocation().Y - 200, GetActorLocation().Z), GetActorRotation(), SpawnParameters);
 					Arrow->SetActorScale3D(FVector3d(1,1,1));
 					ArrowClass = Cast<AMissile>(Arrow);
-					ArrowClass->TargetLocation = FVector3d(-290,50,820);
+					ArrowClass->TargetLocation = FVector3d(-490,50,820);
 					ArrowClass->Log = true;
 					ArrowClass->Speed = 1000;
 					ArrowClass->MeshComponent->SetStaticMesh(ArrowClass->MeshArray[0]);
@@ -167,7 +167,7 @@ void ASoldierNpc::SoldierLog()
 				}
 			}
 
-			if(GameManagerClass->ButtonBInput == 2 && GameManagerClass->ButtonXInput == 1)
+			if(GameManagerClass->ButtonAInput == 2 && GameManagerClass->ButtonBInput == 1)
 			{
 				SingleFire = ParentClass->SoldierCanFire;
 				IsAttacking = true;
