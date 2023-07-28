@@ -144,7 +144,7 @@ void AEnemy::TransformActor()
 		SetActorRotation(FRotator3d(0,0,0));
 	}
 	
-	TargetLocation = FVector3d(GetActorLocation().X,GetActorLocation().Y + 2800, GetActorLocation().Z);
+	TargetLocation = FVector3d(GetActorLocation().X,GetActorLocation().Y + 2600, GetActorLocation().Z);
 	FirstLocation = TargetLocation;
 	
 	SetTransform = true;
@@ -159,12 +159,12 @@ float AEnemy::HitToCastle(float _Health)
 
 	if(TagOfEnemy == 1)
 	{
-		_Health -= 8;
+		_Health -= 2;
 	}
 
 	if(TagOfEnemy == 2)
 	{
-		_Health -= 30;
+		_Health -= 10;
 	}
 
 	return _Health;
@@ -172,7 +172,7 @@ float AEnemy::HitToCastle(float _Health)
 
 bool AEnemy::ArriveCastle()
 {
-	if(GetActorLocation().Y >= -560)
+	if(GetActorLocation().Y >= -764)
 	{
 		hitCastle = true;
 	}

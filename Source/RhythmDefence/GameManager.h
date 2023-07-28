@@ -70,7 +70,7 @@ public:
 	int Min;
 	int Max;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		float HealthOfCastle;
 	
 	float SpawnTime;
