@@ -71,6 +71,7 @@ void AEnemy::Tick(float DeltaTime)
 	
 	if(Health <= 0)
 	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystem, GetActorLocation(),GetActorRotation(),FVector(1,1,1), true, EPSCPoolMethod::None, true);
 		EnemyCheckClass->EnemyArr.Remove(this);
 		this->Destroy();
 	}

@@ -20,6 +20,11 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		AMissile* MissileClass;
 
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ParticleSystem;
+
+	FActorSpawnParameters SpawnParameters;
+	
 	AActor* EnemyCheckActor;
 	AEnemyCheck* EnemyCheckClass;
 

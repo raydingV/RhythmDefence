@@ -23,6 +23,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		UClass* Lava;
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ParticleSystem;
 	
 	UFUNCTION()
 		void ActArrow(float DeltaTime, float Speed);

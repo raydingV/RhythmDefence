@@ -3,6 +3,8 @@
 
 #include "Missile.h"
 
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 AMissile::AMissile()
 {
@@ -110,6 +112,7 @@ void AMissile::ActFire(float DeltaTime)
 
 	if(GetActorLocation().Z <= 435)
 	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystem, GetActorLocation(),GetActorRotation(),FVector(1,1,1), true, EPSCPoolMethod::None, true);
 		this->Destroy();
 	}
 }
