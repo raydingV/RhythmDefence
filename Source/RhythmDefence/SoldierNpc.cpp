@@ -115,7 +115,7 @@ void ASoldierNpc::SoldierFire()
 				IsAttacking = true;
 				if(MissileSpawn != nullptr && SingleFire == true && Waiter <= 0)
 				{
-					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(GetActorLocation().X,GetActorLocation().Y - 1120,960), FRotator3d(0,180,180), SpawnParameters);
+					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(GetActorLocation().X,GetActorLocation().Y - 2120,960), FRotator3d(0,180,180), SpawnParameters);
 					ArrowClass = Cast<AMissile>(Arrow);
 					ArrowClass->Meteor = true;
 					ArrowClass->TargetLocation = FVector3d(GetActorLocation().X,Arrow->GetActorLocation().Y,170);
@@ -135,7 +135,7 @@ void ASoldierNpc::SoldierFire()
 				{
 					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, GetActorLocation(), GetActorRotation(), SpawnParameters);
 					ArrowClass = Cast<AMissile>(Arrow);
-					ArrowClass->TargetLocation = FVector3d(GetActorLocation().X,-2100,170);
+					ArrowClass->TargetLocation = FVector3d(GetActorLocation().X,-3120.0,170);
 					ArrowClass->Fire = true;
 					ArrowClass->Speed = 2000;
 					ParentClass->SoldierFireArray.Push(Arrow);
@@ -158,13 +158,11 @@ void ASoldierNpc::SoldierLog()
 				IsAttacking = true;
 				if(MissileSpawn != nullptr && SingleFire == true && Waiter <= 0)
 				{
-					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(-490, GetActorLocation().Y - 200, GetActorLocation().Z), GetActorRotation(), SpawnParameters);
-					Arrow->SetActorScale3D(FVector3d(1,1,1));
+					Arrow = GetWorld()->SpawnActor<AActor>(MissileSpawn, FVector3d(-40, GetActorLocation().Y - 200, GetActorLocation().Z), FRotator(0,0,0), SpawnParameters);
 					ArrowClass = Cast<AMissile>(Arrow);
-					ArrowClass->TargetLocation = FVector3d(-490,50,820);
+					ArrowClass->TargetLocation = FVector3d(-40,50,820);
 					ArrowClass->Log = true;
 					ArrowClass->Speed = 1000;
-					ArrowClass->MeshComponent->SetStaticMesh(ArrowClass->MeshArray[0]);
 					ParentClass->SoldierFireArray.Push(Arrow);
 					Waiter = 60;
 				}

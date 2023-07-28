@@ -118,12 +118,12 @@ void AMissile::ActLog(float _DeltaTime)
 {
 	if(Crate == false)
 	{
-		SetActorScale3D(FVector(3,3,3));
+		SetActorScale3D(FVector(1.3,1.3,1.3));
 		if(GetActorLocation().Y <= 120)
 		{
 			CanTrigger = true;
-			TargetLocation.Z = 435;
-			if(GetActorLocation().Z <= 435)
+			TargetLocation.Z = 520;
+			if(GetActorLocation().Z <= 520)
 			{
 				if(GetActorLocation().Y >= -3500)
 				{
@@ -137,13 +137,13 @@ void AMissile::ActLog(float _DeltaTime)
 		}
 		else
 		{
-			TargetRotation = FRotator3d(-90,0,0);
+			TargetRotation = FRotator3d(0,0,0);
 		}
 	}
 	else
 	{
 		CanTrigger = false;
-		if(GetActorLocation().Z <= 435)
+		if(GetActorLocation().Z <= 425)
 		{
 			GetWorld()->SpawnActor<AActor>(Lava, GetActorLocation(), FRotator3d(0,0,0));
 			this->Destroy();

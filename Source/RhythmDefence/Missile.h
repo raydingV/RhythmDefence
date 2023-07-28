@@ -63,6 +63,8 @@ public:
 		bool Meteor;
 	
 	bool SetRotation;
+
+	UPROPERTY(BlueprintReadOnly)
 	bool Crate;
 	
 protected:

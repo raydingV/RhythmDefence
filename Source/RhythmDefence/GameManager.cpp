@@ -89,7 +89,7 @@ void AGameManager::ButtonB()
 		ChargeSoldierTag = 2;
 		ChargeSoldier = false;
 	}
-	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonAInput == 2 && ButtonBInput < 1 && ButtonYInput == 0)
+	else if(ChargeSoldier != true && CanMakeCombo == true && ButtonAInput == 2 && ButtonBInput < 1 && ButtonYInput == 0 && ChargeSoldierTag != 2)
 	{
 		ButtonBInput++;
 	}
